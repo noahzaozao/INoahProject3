@@ -13,10 +13,15 @@ package com.inoah.ro.displays
          */
         private var _otherViews:Vector.<ActSprOtherView>;
         private var _headView:ActSprHeadView;
+        private var _weaponView:ActSprWeaponView;
         
         public function get headView():ActSprHeadView
         {
             return _headView;
+        }
+        public function get weaponView():ActSprWeaponView
+        {
+            return _weaponView;
         }
         
         public function get otherViews():Vector.<ActSprOtherView>
@@ -28,8 +33,9 @@ package com.inoah.ro.displays
         {
             super();
             _headView = new ActSprHeadView( this ); 
-            _otherViews = new Vector.<ActSprOtherView>();
-            _otherViews[0] = new ActSprOtherView( this );
+            _weaponView = new ActSprWeaponView( this );
+//            _otherViews = new Vector.<ActSprOtherView>();
+//            _otherViews[0] = new ActSprOtherView( this );
 //            _otherViews[1] = new ActSprOtherView( this );
         }
         
@@ -43,6 +49,10 @@ package com.inoah.ro.displays
                 {
                     _headView.actionIndex = value;
                 }
+                if( _weaponView )
+                {
+                    _weaponView.actionIndex = value;
+                }
             }
         }
         override public function set currentFrame( value:uint ):void
@@ -51,6 +61,10 @@ package com.inoah.ro.displays
             if( _headView )
             {
                 _headView.currentFrame = value;
+            }
+            if( _weaponView )
+            {
+                _weaponView.currentFrame = value;
             }
         }
         
@@ -72,10 +86,14 @@ package com.inoah.ro.displays
                 _headView.tick( delta );
             }
             //weaponView
-            if( otherViews[0] )
+            if( _weaponView )
             {
-                otherViews[0].tick( delta );
+                _weaponView.tick( delta );
             }
+//            if( otherViews[0] )
+//            {
+//                otherViews[0].tick( delta );
+//            }
         }
     }
 }

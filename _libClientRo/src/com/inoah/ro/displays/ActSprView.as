@@ -146,10 +146,13 @@ package com.inoah.ro.displays
             var apsv:AnyPatSprV0101 = _currentAaap.apsList[0];
             if( apsv.sprNo == 0xffffffff )
             {
-                apsv = _currentAaap.apsList[1];
-                isExt = true;
+                if( _currentAaap.apsList.length > 1)
+                {
+                    apsv = _currentAaap.apsList[1];
+                    isExt = true;
+                }
             }
-            if( apsv as AnyPatSprV0101 )
+            if( apsv as AnyPatSprV0101 && apsv.sprNo != 0xffffffff )
             {
                 var anySprite:AnySprite;
                 anySprite = _spr.imgs[ apsv.sprNo ];

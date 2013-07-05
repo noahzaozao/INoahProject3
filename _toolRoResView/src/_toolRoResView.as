@@ -1,6 +1,5 @@
 package
 {
-	import com.bit101.components.InputText;
 	import com.bit101.components.Style;
 	
 	import flash.display.Sprite;

@@ -57,7 +57,8 @@ package
             
             
             var charInfo:CharacterInfo = new CharacterInfo();
-            charInfo.init( "可爱的早早", "data/sprite/firstCharHead.act", "data/sprite/firstChar.act" );
+            charInfo.init( "可爱的早早", "data/sprite/牢埃练/赣府烹/巢/2_巢.act", "data/sprite/牢埃练/个烹/巢/檬焊磊_巢.act", "data/sprite/牢埃练/檬焊磊/檬焊磊_巢_1207.act" );
+//            charInfo.init( "可爱的早早", "data/sprite/牢埃练/赣府烹/咯/2_咯.act", "data/sprite/牢埃练/个烹/巢/檬焊磊_咯.act" );
             _charView = new PlayerView( charInfo );
             _charView.x = 400;
             _charView.y = 400;

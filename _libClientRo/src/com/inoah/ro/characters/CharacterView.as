@@ -1,13 +1,9 @@
 package com.inoah.ro.characters
 {
-    import com.inoah.ro.consts.DirIndexConsts;
-    import com.inoah.ro.consts.MgrTypeConsts;
     import com.inoah.ro.displays.ActSprBodyView;
     import com.inoah.ro.displays.valueBar.ValueBarView;
     import com.inoah.ro.infos.CharacterInfo;
     import com.inoah.ro.loaders.ActSprLoader;
-    import com.inoah.ro.managers.KeyMgr;
-    import com.inoah.ro.managers.MainMgr;
     import com.inoah.ro.structs.CACT;
     
     import flash.display.Sprite;
@@ -17,7 +13,6 @@ package com.inoah.ro.characters
     import flash.text.TextField;
     import flash.text.TextFieldAutoSize;
     import flash.text.TextFormat;
-    import flash.ui.Keyboard;
     
     /**
      * 
@@ -46,11 +41,12 @@ package com.inoah.ro.characters
         protected var _y:Number;
         protected var _moveTime:Number;
         protected var _isAttacking:Boolean;
-
+        
         protected var _headTopContainer:Sprite;
         protected var _label:TextField;
         protected var _hpValBar:ValueBarView;
         protected var _spValBar:ValueBarView;
+        private var _weaponLoader:ActSprLoader;
         
         public function CharacterView( charInfo:CharacterInfo = null )
         {
@@ -108,7 +104,7 @@ package com.inoah.ro.characters
             _hpValBar.y = 15;
             addChild( _hpValBar );
             _hpValBar.update( 100, 100 );
-
+            
             _spValBar = new ValueBarView( 0x2868FF , 0x333333 );
             _spValBar.x = -_spValBar.width / 2;
             _spValBar.y = 20;
@@ -129,6 +125,11 @@ package com.inoah.ro.characters
             {
                 _headLoader = new ActSprLoader( _charInfo.headRes );
                 _headLoader.addEventListener( Event.COMPLETE, onHeadLoadComplete );
+            }
+            if( _charInfo.weaponRes )
+            {
+                _weaponLoader = new ActSprLoader( _charInfo.weaponRes );
+                _weaponLoader.addEventListener( Event.COMPLETE, onWeaponLoadComplete );
             }
         }
         
@@ -153,6 +154,16 @@ package com.inoah.ro.characters
             _bodyView.headView.initSpr( _headLoader.sprData );
             addChild( _bodyView );
             addChild( _bodyView.headView );
+        }
+        
+        protected function onWeaponLoadComplete( e:Event):void
+        {
+            _weaponLoader.removeEventListener( Event.COMPLETE, onWeaponLoadComplete );
+            _bodyView.weaponView.initAct( _weaponLoader.actData );
+            _bodyView.weaponView.initSpr( _weaponLoader.sprData );
+            addChild( _bodyView );
+            addChild( _bodyView.headView );
+            addChild( _bodyView.weaponView );
         }
         
         public function tick( delta:Number ):void
@@ -199,7 +210,8 @@ package com.inoah.ro.characters
         
         public function actionAttack():void
         {
-            _currentIndex = 40;
+            _currentIndex = 80;
+//            _currentIndex = 40;
             if( _bodyView )
             {
                 _bodyView.actionIndex = _currentIndex + _dirIndex;
@@ -242,27 +254,27 @@ package com.inoah.ro.characters
         {
             return _isMoving;
         }
-
+        
         public function set isAttacking( value:Boolean ):void
         {
             _isAttacking = value;
         }
-
+        
         public function get isAttacking():Boolean
         {
             return _isAttacking;
         }
-
+        
         public function set dirIndex( value:uint ):void
         {
             _dirIndex = value;
         }
-
+        
         public function get dirIndex():uint
         {
             return _dirIndex;
         }
-
+        
         public function get speed():uint
         {
             return _speed;

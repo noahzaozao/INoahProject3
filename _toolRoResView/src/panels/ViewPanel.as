@@ -201,6 +201,11 @@ package panels
                     _charInfo.setHeadRes( data );
                     break;
                 }
+                case 2:
+                {
+                    _charInfo.setWeaponRes( data );
+                    break;
+                }
             }
             if( !_charView )//&& _charInfo.isReady )
             {

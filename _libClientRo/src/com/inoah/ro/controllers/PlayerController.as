@@ -9,8 +9,7 @@ package com.inoah.ro.controllers
     
     import flash.events.Event;
     import flash.ui.Keyboard;
-    import flash.utils.getTimer;
-
+    
     public class PlayerController
     {
         private var _playerView:PlayerView;
@@ -100,7 +99,12 @@ package com.inoah.ro.controllers
         
         protected function onActionEndHandler( e:Event):void
         {
-            if( _playerView.actionIndex >= 40 && _playerView.actionIndex < 48 )
+            //noah
+//            if( _playerView.actionIndex >= 40 && _playerView.actionIndex < 48 )
+//            {
+//                _playerView.isAttacking = false;
+//            }
+            if( _playerView.actionIndex >= 80 && _playerView.actionIndex < 88 )
             {
                 _playerView.isAttacking = false;
             }

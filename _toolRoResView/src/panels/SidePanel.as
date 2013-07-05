@@ -45,7 +45,7 @@ package panels
             _weaponBtn = new PushButton( this , 80, 0 , "weapon");
             _weaponBtn.setSize( 40, 20 );
             _weaponBtn.toggle = true;
-//            _weaponBtn.addEventListener( MouseEvent.CLICK, onSwitchHandler );
+            _weaponBtn.addEventListener( MouseEvent.CLICK, onSwitchHandler );
             
             //列出文件
             fileList = new List( this, 0, 50 );
