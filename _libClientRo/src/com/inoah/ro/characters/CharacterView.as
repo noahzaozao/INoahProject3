@@ -192,10 +192,12 @@ package com.inoah.ro.characters
         
         public function actionStand():void
         {
-            _currentIndex = 0;
+//            _currentIndex = 0;
+            _currentIndex = 32;
             if( _bodyView )
             {
                 _bodyView.actionIndex = _currentIndex + _dirIndex;
+                _bodyView.weaponView.visible =true;
             }
         }
         
@@ -205,6 +207,7 @@ package com.inoah.ro.characters
             if( _bodyView )
             {
                 _bodyView.actionIndex = _currentIndex + _dirIndex;
+                _bodyView.weaponView.visible =false;
             }
         }
         
@@ -215,6 +218,7 @@ package com.inoah.ro.characters
             if( _bodyView )
             {
                 _bodyView.actionIndex = _currentIndex + _dirIndex;
+                _bodyView.weaponView.visible =true;
             }
         }
         

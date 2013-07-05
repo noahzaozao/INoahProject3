@@ -3,6 +3,7 @@ package
     import com.inoah.ro.characters.PlayerView;
     import com.inoah.ro.consts.MgrTypeConsts;
     import com.inoah.ro.controllers.PlayerController;
+    import com.inoah.ro.displays.ActSprBodyView;
     import com.inoah.ro.infos.CharacterInfo;
     import com.inoah.ro.managers.KeyMgr;
     import com.inoah.ro.managers.MainMgr;
@@ -26,6 +27,7 @@ package
         
         private var _playerController:PlayerController;
         private var _charView:PlayerView;
+        private var _monsterViewList:Vector.<ActSprBodyView>;
         //        private var testMapView:*;
         private var lastTimeStamp:int;
         

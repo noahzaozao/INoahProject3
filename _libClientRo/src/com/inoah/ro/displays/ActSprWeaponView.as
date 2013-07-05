@@ -29,22 +29,30 @@ package com.inoah.ro.displays
             {
                 return;
             }
-            
             _counter.tick( delta );
-            if( _counter.expired )
+            var couldRender:Boolean;
+            while( _counter.expired == true )
             {
-                _counter.reset( _counterTarget );
-                currentFrame++;
-                if( _currentFrame >= _act.aall.aa[_actionIndex].aaap.length )
+                if( _currentFrame >= _act.aall.aa[_actionIndex].aaap.length - 1 )
                 {
-                    currentFrame = 0;
+                    _currentFrame = 0;
                 }
-            }
-            else 
-            {
-                return;
+                else
+                {
+                    _currentFrame++;
+                }
+                couldRender = true;
+                _counter.reset( _counterTarget );
             }
             
+            if(couldRender == true)
+            {
+                updateFrame();
+            }
+        }
+        
+        override protected function updateFrame():void
+        {
             _currentAaap = _act.aall.aa[_actionIndex].aaap[_currentFrame];
             
             var isExt:Boolean = false;
@@ -83,17 +91,6 @@ package com.inoah.ro.displays
                     _bitmap.y = -_bitmap.height / 2 + apsv.yOffs + _bodyView.currentAaap.ExtYoffs - _currentAaap.ExtYoffs;
                     _bitmap.scaleX = -1;
                 }
-                if( visible == false )
-                {
-                    visible = true;
-                }
-            }
-            else
-            {
-                if( visible == true )
-                {
-                    visible = false;
-                }
             }
             if( apsv as AnyPatSprV0201 )
             {
@@ -114,5 +111,6 @@ package com.inoah.ro.displays
                 apsv.sprH;
             }
         }
+        
     }
 }

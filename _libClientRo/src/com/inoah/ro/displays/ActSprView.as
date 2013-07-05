@@ -41,8 +41,6 @@ package com.inoah.ro.displays
         {
             _counter = new Counter();
             _counterTarget = 0.075;
-            _counter.initialize();
-            _counter.reset( _counterTarget );
         }
         
         public function get counterTarget():Number
@@ -86,9 +84,10 @@ package com.inoah.ro.displays
                 _act.destory();
             }
             _act= new CACT( data );
-            _counter.reset( _counterTarget );
             actionIndex = 0;
             currentFrame = 0;
+            _counter.initialize();
+            _counter.reset( _counterTarget );
         }
         
         public function initSpr( data:ByteArray ):void
@@ -98,7 +97,9 @@ package com.inoah.ro.displays
                 _spr.destory();
             }
             _spr = new CSPR( data , data.length );
+            _counter.initialize();
             _counter.reset( _counterTarget );
+            updateFrame();
             _couldTick = true;
         }
         
@@ -125,21 +126,30 @@ package com.inoah.ro.displays
                 return;
             }
             _counter.tick( delta );
-            if( _counter.expired )
+            var couldRender:Boolean;
+            while( _counter.expired == true )
             {
-                _counter.reset( _counterTarget );
-                currentFrame++;
-                if( _currentFrame >= _act.aall.aa[_actionIndex].aaap.length )
+                if( _currentFrame >= _act.aall.aa[_actionIndex].aaap.length - 1 )
                 {
-                    currentFrame = 0;
+                    _currentFrame = 0;
                     dispatchEvent(new ActSprViewEvent( ActSprViewEvent.ACTION_END, true ));
                 }
-            }
-            else 
-            {
-                return;
+                else
+                {
+                    _currentFrame++;
+                }
+                couldRender = true;
+                _counter.reset( _counterTarget );
             }
             
+            if(couldRender == true)
+            {
+                updateFrame();
+            }
+        }
+        
+        protected function updateFrame():void
+        {
             _currentAaap = _act.aall.aa[_actionIndex].aaap[_currentFrame];
             
             var isExt:Boolean = false;

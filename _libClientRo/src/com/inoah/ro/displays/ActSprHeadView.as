@@ -34,32 +34,43 @@ package com.inoah.ro.displays
             {
                 return;
             }
-            
             _counter.tick( delta );
-            if( _counter.expired )
+            var couldRender:Boolean;
+            while( _counter.expired == true )
             {
-                _counter.reset( _counterTarget );
-                currentFrame++;
-                if( _currentFrame >= _act.aall.aa[_actionIndex].aaap.length )
+                if( _currentFrame >= _act.aall.aa[_actionIndex].aaap.length - 1 )
                 {
-                    currentFrame = 0;
+                    _currentFrame = 0;
                 }
-            }
-            else 
-            {
-                return;
+                else
+                {
+                    _currentFrame++;
+                }
+                couldRender = true;
+                _counter.reset( _counterTarget );
             }
             
+            if(couldRender == true)
+            {
+                updateFrame();
+            }
+        }
+        
+        override protected function updateFrame():void
+        {
             _currentAaap = _act.aall.aa[_actionIndex].aaap[_currentFrame];
             
             var isExt:Boolean = false;
             var apsv:AnyPatSprV0101 = _currentAaap.apsList[0];
             if( apsv.sprNo == 0xffffffff )
             {
-                apsv = _currentAaap.apsList[1];
-                isExt = true;
+                if( _currentAaap.apsList.length > 1)
+                {
+                    apsv = _currentAaap.apsList[1];
+                    isExt = true;
+                }
             }
-            if( apsv as AnyPatSprV0101 )
+            if( apsv as AnyPatSprV0101 && apsv.sprNo != 0xffffffff )
             {
                 var anySprite:AnySprite;
                 anySprite = _spr.imgs[ apsv.sprNo ];
