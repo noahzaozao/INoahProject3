@@ -16,7 +16,6 @@ package
             {
                 _bodyView.tick( delta );
             }
-            trace( _currentIndex , _dirIndex );
         }
     }
 }

@@ -7,15 +7,17 @@ package panels
     import com.inoah.ro.consts.DirIndexConsts;
     import com.inoah.ro.infos.CharacterInfo;
     
-    import consts.AppConsts;
-    
     import flash.display.DisplayObjectContainer;
     import flash.display.Shape;
     import flash.events.MouseEvent;
     import flash.net.URLLoader;
     
+    import consts.AppConsts;
+    
     public class ViewPanel extends Panel
     {
+        private var _txtPath:InputText;
+        
         private var _dirUpBtn:PushButton;
         private var _dirDownBtn:PushButton;
         private var _dirLeftBtn:PushButton;
@@ -48,6 +50,9 @@ package panels
         override protected function init():void
         {
             super.init();
+            
+            _txtPath = new InputText( this , 0 , 0 ,"aaa" );
+            _txtPath.setSize( 500, 30 );
             
             var bgShape:Shape = new Shape();
             bgShape.graphics.lineStyle(0,0xFF0000)
@@ -188,6 +193,7 @@ package panels
                 case 0:
                 {
                     _charInfo.setBodyRes( data );
+                    _txtPath.text = data;
                     break;
                 }
                 case 1:
@@ -196,15 +202,22 @@ package panels
                     break;
                 }
             }
-            if( !_charView && _charInfo.isReady )
+            if( !_charView )//&& _charInfo.isReady )
             {
                 _charView = new ECharacterView( _charInfo );
                 _charView.x = 400;
                 _charView.y = 400;
                 addChild( _charView );
             }
+            else
+            {
+                _charView.updateCharInfo( _charInfo );
+            }
             
-            _actionTxt.text = "0";
+            if( _actionTxt.text == "" )
+            {
+                _actionTxt.text = "0";
+            }
             
             _couldTick = true;
         }

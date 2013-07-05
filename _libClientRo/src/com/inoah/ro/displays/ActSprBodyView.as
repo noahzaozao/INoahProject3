@@ -1,7 +1,6 @@
 package com.inoah.ro.displays
 {
     import com.inoah.ro.structs.acth.AnyActAnyPat;
-
     /**
      * body view 
      * @author inoah

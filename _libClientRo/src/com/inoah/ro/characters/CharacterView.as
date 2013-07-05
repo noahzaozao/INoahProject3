@@ -115,27 +115,42 @@ package com.inoah.ro.characters
             addChild( _spValBar );
             _spValBar.update( 50, 100 );
             
-            _bodyLoader = new ActSprLoader( _charInfo.bodyRes );
-            _bodyLoader.addEventListener( Event.COMPLETE, onBodyLoadComplete );
+            updateCharInfo( _charInfo );
+        }
+        
+        public function updateCharInfo( charInfo:CharacterInfo ):void
+        {
+            if( !_bodyLoader || _bodyLoader.actUrl != _charInfo.bodyRes )
+            {
+                _bodyLoader = new ActSprLoader( _charInfo.bodyRes );
+                _bodyLoader.addEventListener( Event.COMPLETE, onBodyLoadComplete );
+            }
+            if( _charInfo.headRes )
+            {
+                _headLoader = new ActSprLoader( _charInfo.headRes );
+                _headLoader.addEventListener( Event.COMPLETE, onHeadLoadComplete );
+            }
         }
         
         protected function onBodyLoadComplete( e:Event):void
         {
             _bodyLoader.removeEventListener( Event.COMPLETE, onBodyLoadComplete );
-            _headLoader = new ActSprLoader( _charInfo.headRes );
-            _headLoader.addEventListener( Event.COMPLETE, onHeadLoadComplete );
+            if( !_bodyView )
+            {
+                _bodyView = new ActSprBodyView();
+            }
+            _bodyView.initAct( _bodyLoader.actData );
+            _bodyView.initSpr( _bodyLoader.sprData );
+            //noah
+            _bodyView.actionIndex = 8;
+            addChild( _bodyView );
         }
         
         protected function onHeadLoadComplete( e:Event):void
         {
             _headLoader.removeEventListener( Event.COMPLETE, onHeadLoadComplete );
-            
-            _bodyView = new ActSprBodyView();
-            _bodyView.initAct( _bodyLoader.actData );
-            _bodyView.initSpr( _bodyLoader.sprData );
             _bodyView.headView.initAct( _headLoader.actData );
             _bodyView.headView.initSpr( _headLoader.sprData );
-            _bodyView.actionIndex = 8;
             addChild( _bodyView );
             addChild( _bodyView.headView );
         }

@@ -24,6 +24,16 @@ package com.inoah.ro.loaders
             _actLoader.load( new URLRequest( _actUrl ) );
         }
         
+        public function get actUrl():String
+        {
+            return _actUrl;
+        }
+
+        public function get sprUrl():String
+        {
+            return _sprUrl;
+        }
+        
         public function get actData():ByteArray
         {
             return _actLoader.data;

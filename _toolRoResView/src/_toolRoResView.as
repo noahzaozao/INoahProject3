@@ -1,8 +1,7 @@
 package
 {
+	import com.bit101.components.InputText;
 	import com.bit101.components.Style;
-	
-	import consts.AppConsts;
 	
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -10,6 +9,8 @@ package
 	import flash.filesystem.FileMode;
 	import flash.filesystem.FileStream;
 	import flash.utils.getTimer;
+	
+	import consts.AppConsts;
 	
 	import panels.DisplayEvent;
 	import panels.SidePanel;

@@ -51,7 +51,6 @@ package com.inoah.ro.displays
             }
             
             _currentAaap = _act.aall.aa[_actionIndex].aaap[_currentFrame];
-            trace( _currentFrame );
             
             var isExt:Boolean = false;
             var apsv:AnyPatSprV0101 = _currentAaap.apsList[0];
