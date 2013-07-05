@@ -23,20 +23,26 @@ package com.inoah.ro.displays
             _bodyView = bodyView;
         }
         
+        override public function set currentFrame( value:uint ):void
+        {
+            _currentFrame = value;
+        }
+        
         override public function tick(delta:Number):void
         {
             if( !_couldTick )
             {
                 return;
             }
+            
             _counter.tick( delta );
             if( _counter.expired )
             {
                 _counter.reset( _counterTarget );
-                _currentFrame++;
+                currentFrame++;
                 if( _currentFrame >= _act.aall.aa[_actionIndex].aaap.length )
                 {
-                    _currentFrame = 0;
+                    currentFrame = 0;
                 }
             }
             else 
@@ -45,6 +51,7 @@ package com.inoah.ro.displays
             }
             
             _currentAaap = _act.aall.aa[_actionIndex].aaap[_currentFrame];
+            trace( _currentFrame );
             
             var isExt:Boolean = false;
             var apsv:AnyPatSprV0101 = _currentAaap.apsList[0];

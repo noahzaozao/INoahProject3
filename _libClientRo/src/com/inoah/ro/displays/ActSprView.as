@@ -60,12 +60,17 @@ package com.inoah.ro.displays
             if( _actionIndex != value )
             {
                 _actionIndex = value;
-                _currentFrame = 0;
+                currentFrame = 0;
             }
         }
         public function get actionIndex():uint
         {
             return   _actionIndex;
+        }
+        
+        public function get currentFrame():uint
+        {
+            return _currentFrame;
         }
         
         public function set currentFrame( value:uint ):void
@@ -82,8 +87,8 @@ package com.inoah.ro.displays
             }
             _act= new CACT( data );
             _counter.reset( _counterTarget );
-            _actionIndex = 0;
-            _currentFrame = 0;
+            actionIndex = 0;
+            currentFrame = 0;
         }
         
         public function initSpr( data:ByteArray ):void
@@ -123,10 +128,10 @@ package com.inoah.ro.displays
             if( _counter.expired )
             {
                 _counter.reset( _counterTarget );
-                _currentFrame++;
+                currentFrame++;
                 if( _currentFrame >= _act.aall.aa[_actionIndex].aaap.length )
                 {
-                    _currentFrame = 0;
+                    currentFrame = 0;
                     dispatchEvent(new ActSprViewEvent( ActSprViewEvent.ACTION_END, true ));
                 }
             }

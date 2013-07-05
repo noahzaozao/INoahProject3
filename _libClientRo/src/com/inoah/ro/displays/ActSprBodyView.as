@@ -1,10 +1,6 @@
 package com.inoah.ro.displays
 {
-    import com.inoah.ro.structs.CACT;
-    import com.inoah.ro.structs.CSPR;
     import com.inoah.ro.structs.acth.AnyActAnyPat;
-    
-    import flash.utils.ByteArray;
 
     /**
      * body view 
@@ -70,7 +66,7 @@ package com.inoah.ro.displays
             //only stand
             if( _actionIndex < 8 || (_actionIndex >=16) && (_actionIndex < 24)  )
             {
-                currentFrame = 0;
+                currentFrame = 2;
             }
             if( _headView )
             {
