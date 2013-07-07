@@ -27,11 +27,11 @@ package com.inoah.ro.displays
         protected var _spr:CSPR;
         protected var _actionIndex:uint;
         protected var _currentFrame:uint;
+        protected var _currentAaap:AnyActAnyPat;
         protected var _bitmap:Bitmap;
         protected var _counterTarget:Number;
         protected var _counter:Counter;
         protected var _couldTick:Boolean;
-        protected var _currentAaap:AnyActAnyPat;
         
         public function get actions():CACT
         {
@@ -42,6 +42,11 @@ package com.inoah.ro.displays
         {
             _counter = new Counter();
             _counterTarget = 0.075;
+        }
+        
+        public function get currentAaap():AnyActAnyPat
+        {
+            return _currentAaap;
         }
         
         public function get counterTarget():Number
@@ -157,7 +162,7 @@ package com.inoah.ro.displays
             }
         }
         
-        protected function updateFrame():void
+        public function updateFrame():void
         {
             _currentAaap = _act.aall.aa[_actionIndex].aaap[_currentFrame];
             

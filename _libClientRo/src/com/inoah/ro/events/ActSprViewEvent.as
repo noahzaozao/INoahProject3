@@ -4,6 +4,7 @@ package com.inoah.ro.events
     
     public class ActSprViewEvent extends Event
     {
+        public static var NEXT_FRAME:String = "ActSprViewEvent.next_frame";
         public static var ACTION_END:String = "ActSprViewEvent.action_end";
         
         public function ActSprViewEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false)

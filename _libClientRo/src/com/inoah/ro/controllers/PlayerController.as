@@ -93,6 +93,8 @@ package com.inoah.ro.controllers
                     var dis:Number = Point.distance( new Point( _playerView.x, _playerView.y ), new Point( _currentTargetView.x, _currentTargetView.y ) );
                     if( dis > 80 )
                     {
+                        _currentTargetView.removeEventListener( ActSprViewEvent.ACTION_END, onHitingEndHandler );
+                        _currentTargetView.isHiting = false;
                         _currentTargetView = null;
                     }
                     else

@@ -23,40 +23,12 @@ package com.inoah.ro.displays
             _bodyView = bodyView;
         }
         
-        override public function set currentFrame( value:uint ):void
-        {
-            _currentFrame = value;
-        }
-        
         override public function tick(delta:Number):void
         {
-            if( !_couldTick )
-            {
-                return;
-            }
-            _counter.tick( delta );
-            var couldRender:Boolean;
-            while( _counter.expired == true )
-            {
-                if( _currentFrame >= _act.aall.aa[_actionIndex].aaap.length - 1 )
-                {
-                    _currentFrame = 0;
-                }
-                else
-                {
-                    _currentFrame++;
-                }
-                couldRender = true;
-                _counter.reset( _counterTarget );
-            }
             
-            if(couldRender == true)
-            {
-                updateFrame();
-            }
         }
         
-        override protected function updateFrame():void
+        override public function updateFrame():void
         {
             _currentAaap = _act.aall.aa[_actionIndex].aaap[_currentFrame];
             

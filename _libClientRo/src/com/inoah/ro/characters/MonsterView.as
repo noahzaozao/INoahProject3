@@ -30,7 +30,15 @@ package com.inoah.ro.characters
             if( _bodyView )
             {
                 _bodyView.actionIndex = _currentIndex + _dirIndex;
-                _bodyView.weaponView.visible =true;
+                if( _headView )
+                {
+                    _headView.actionIndex = _currentIndex + _dirIndex;
+                }
+                if( _weaponView )
+                {
+                    _weaponView.actionIndex = _currentIndex + _dirIndex;
+                    _weaponView.visible =true;
+                }
             }
         }
         
@@ -41,7 +49,15 @@ package com.inoah.ro.characters
             if( _bodyView )
             {
                 _bodyView.actionIndex = _currentIndex + _dirIndex;
-                _bodyView.weaponView.visible =true;
+                if( _headView )
+                {
+                    _headView.actionIndex = _currentIndex + _dirIndex;
+                }
+                if( _weaponView )
+                {
+                    _weaponView.actionIndex = _currentIndex + _dirIndex;
+                    _weaponView.visible =true;
+                }
             }
         }
         
@@ -102,7 +118,7 @@ package com.inoah.ro.characters
         override public function tick( delta:Number ):void
         {
             super.tick( delta );
-            if( !_isMoving )
+            if( !_isMoving && !_isHiting )
             {
                 _moveCounter.tick( delta );
             }
