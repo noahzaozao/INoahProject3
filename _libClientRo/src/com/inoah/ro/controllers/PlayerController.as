@@ -1,22 +1,54 @@
 package com.inoah.ro.controllers
 {
+    import com.inoah.ro.characters.CharacterView;
+    import com.inoah.ro.characters.MonsterView;
     import com.inoah.ro.characters.PlayerView;
     import com.inoah.ro.consts.DirIndexConsts;
     import com.inoah.ro.consts.MgrTypeConsts;
     import com.inoah.ro.events.ActSprViewEvent;
+    import com.inoah.ro.infos.CharacterInfo;
     import com.inoah.ro.managers.KeyMgr;
     import com.inoah.ro.managers.MainMgr;
+    import com.inoah.ro.utils.Counter;
     
+    import flash.display.Sprite;
     import flash.events.Event;
+    import flash.geom.Point;
     import flash.ui.Keyboard;
     
     public class PlayerController
     {
+        private var _root:Sprite;
         private var _playerView:PlayerView;
+        private var _currentTargetView:CharacterView;
+        private var _targetList:Vector.<MonsterView>;
+        private var _isCheckTarget:Boolean;
+        private var _checkTargetCounter:Counter;
         
-        public function PlayerController( playerView:PlayerView )
+        public function set targetView( value:CharacterView ):void
         {
-            _playerView = playerView;
+            _currentTargetView = value;
+        }
+        
+        public function set targetList( value:Vector.<MonsterView> ):void
+        {
+            _targetList = value;
+        }
+        
+        public function PlayerController( root:Sprite )
+        {
+            _root = root;
+            var charInfo:CharacterInfo = new CharacterInfo();
+            charInfo.init( "可爱的早早", "data/sprite/牢埃练/赣府烹/巢/2_巢.act", "data/sprite/牢埃练/个烹/巢/檬焊磊_巢.act", "data/sprite/牢埃练/檬焊磊/檬焊磊_巢_1207.act" );
+            //            charInfo.init( "可爱的早早", "data/sprite/牢埃练/赣府烹/咯/2_咯.act", "data/sprite/牢埃练/个烹/巢/檬焊磊_咯.act" );
+            _playerView = new PlayerView( charInfo );
+            _playerView.x = 400;
+            _playerView.y = 400;
+            _root.addChild( _playerView );
+            
+            _checkTargetCounter = new Counter();
+            _checkTargetCounter.initialize();
+            _checkTargetCounter.reset( 1 );
         }
         
         public function tick( delta:Number ):void
@@ -24,6 +56,7 @@ package com.inoah.ro.controllers
             if( _playerView )
             {
                 moveCheck( delta );
+                _playerView.tick( delta );
             }
         }
         
@@ -39,10 +72,35 @@ package com.inoah.ro.controllers
             {
                 return;
             }
+            _checkTargetCounter.tick( delta );
+            if( _checkTargetCounter.expired )
+            {
+                _isCheckTarget = false;
+                _checkTargetCounter.reset( 1 );
+            }
             if( keyMgr.isDown( Keyboard.J ))
             {
-                _playerView.isAttacking = true;
-                _playerView.addEventListener( ActSprViewEvent.ACTION_END, onActionEndHandler );
+                if( !_currentTargetView )
+                {
+                    if( !_isCheckTarget )
+                    {
+                        _isCheckTarget = true;
+                        chooseTarget();
+                    }
+                }
+                if( _currentTargetView )
+                {
+                    var dis:Number = Point.distance( new Point( _playerView.x, _playerView.y ), new Point( _currentTargetView.x, _currentTargetView.y ) );
+                    if( dis > 80 )
+                    {
+                        _currentTargetView = null;
+                    }
+                    else
+                    {
+                        _playerView.addEventListener( ActSprViewEvent.ACTION_END, onActionEndHandler );
+                        _playerView.isAttacking = true;
+                    }
+                }
                 return;
             }
             if( keyMgr.isDown( Keyboard.W ) )
@@ -97,8 +155,31 @@ package com.inoah.ro.controllers
             }
         }
         
+        private function chooseTarget():void
+        {
+            if( !_currentTargetView )
+            {
+                var distanceList:Vector.<Point> = new Vector.<Point>();
+                var len:int = _targetList.length;
+                for( var i:int = 0;i<len;i++)
+                {
+                    distanceList[i] = new Point();
+                    distanceList[i].x = i;
+                    distanceList[i].y = Point.distance( new Point( _playerView.x, _playerView.y ), new Point( _targetList[i].x, _targetList[i].y ) );
+                }
+                distanceList.sort( sortDistanceFunc );
+                _currentTargetView = _targetList[ distanceList[0].x ];
+            }
+        }
+        
+        private function sortDistanceFunc( a:Point, b:Point ):Number
+        {
+            return a.y - b.y;
+        }
+        
         protected function onActionEndHandler( e:Event):void
         {
+            _playerView.removeEventListener( ActSprViewEvent.ACTION_END, onActionEndHandler );
             //noah
 //            if( _playerView.actionIndex >= 40 && _playerView.actionIndex < 48 )
 //            {
@@ -108,6 +189,17 @@ package com.inoah.ro.controllers
             {
                 _playerView.isAttacking = false;
             }
+            if( _currentTargetView )
+            {
+                _currentTargetView.addEventListener( ActSprViewEvent.ACTION_END, onHitingEndHandler );
+                _currentTargetView.isHiting = true;
+            }
+        }
+        
+        protected function onHitingEndHandler(event:Event):void
+        {
+            _currentTargetView.removeEventListener( ActSprViewEvent.ACTION_END, onHitingEndHandler );
+            _currentTargetView.isHiting = false;
         }
     }
 }

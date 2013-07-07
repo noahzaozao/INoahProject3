@@ -2,6 +2,11 @@
 <flexLibProperties includeAllClasses="true" useMultiPlatformConfig="false" version="3">
   <includeClasses>
     <classEntry path="com.inoah.ro.displays.ActSprWeaponView"/>
+    <classEntry path="com.inoah.ro.characters.MonsterView"/>
+    <classEntry path="com.inoah.ro.controllers.MonsterController"/>
+    <classEntry path="com.inoah.ro.maps.MapView"/>
+    <classEntry path="com.inoah.ro.controllers.MapController"/>
+    <classEntry path="com.inoah.ro.managers.AssetMgr"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

@@ -1,13 +1,15 @@
 package com.inoah.ro.characters
 {
+    import com.inoah.ro.consts.MgrTypeConsts;
     import com.inoah.ro.displays.ActSprBodyView;
     import com.inoah.ro.displays.valueBar.ValueBarView;
     import com.inoah.ro.infos.CharacterInfo;
     import com.inoah.ro.loaders.ActSprLoader;
+    import com.inoah.ro.managers.AssetMgr;
+    import com.inoah.ro.managers.MainMgr;
     import com.inoah.ro.structs.CACT;
     
     import flash.display.Sprite;
-    import flash.events.Event;
     import flash.filters.DropShadowFilter;
     import flash.geom.Point;
     import flash.text.TextField;
@@ -47,6 +49,7 @@ package com.inoah.ro.characters
         protected var _hpValBar:ValueBarView;
         protected var _spValBar:ValueBarView;
         private var _weaponLoader:ActSprLoader;
+        private var _isHiting:Boolean;
         
         public function CharacterView( charInfo:CharacterInfo = null )
         {
@@ -103,39 +106,44 @@ package com.inoah.ro.characters
             _hpValBar.x = -_hpValBar.width / 2;
             _hpValBar.y = 15;
             addChild( _hpValBar );
-            _hpValBar.update( 100, 100 );
+            _hpValBar.update( 1, 100 );
             
             _spValBar = new ValueBarView( 0x2868FF , 0x333333 );
             _spValBar.x = -_spValBar.width / 2;
             _spValBar.y = 20;
             addChild( _spValBar );
-            _spValBar.update( 50, 100 );
+            _spValBar.update( 1, 100 );
             
             updateCharInfo( _charInfo );
         }
         
         public function updateCharInfo( charInfo:CharacterInfo ):void
         {
+            var assetMgr:AssetMgr = MainMgr.instance.getMgr( MgrTypeConsts.ASSET_MGR ) as AssetMgr;
             if( !_bodyLoader || _bodyLoader.actUrl != _charInfo.bodyRes )
             {
-                _bodyLoader = new ActSprLoader( _charInfo.bodyRes );
-                _bodyLoader.addEventListener( Event.COMPLETE, onBodyLoadComplete );
+                assetMgr.getRes( _charInfo.bodyRes, onBodyLoadComplete );
+                //                _bodyLoader = new ActSprLoader( _charInfo.bodyRes );
+                //                _bodyLoader.addEventListener( Event.COMPLETE, onBodyLoadComplete );
             }
             if( _charInfo.headRes )
             {
-                _headLoader = new ActSprLoader( _charInfo.headRes );
-                _headLoader.addEventListener( Event.COMPLETE, onHeadLoadComplete );
+                assetMgr.getRes( _charInfo.headRes, onHeadLoadComplete );
+                //                _headLoader = new ActSprLoader( _charInfo.headRes );
+                //                _headLoader.addEventListener( Event.COMPLETE, onHeadLoadComplete );
             }
             if( _charInfo.weaponRes )
             {
-                _weaponLoader = new ActSprLoader( _charInfo.weaponRes );
-                _weaponLoader.addEventListener( Event.COMPLETE, onWeaponLoadComplete );
+                assetMgr.getRes( _charInfo.weaponRes, onWeaponLoadComplete );
+                //                _weaponLoader = new ActSprLoader( _charInfo.weaponRes );
+                //                _weaponLoader.addEventListener( Event.COMPLETE, onWeaponLoadComplete );
             }
         }
         
-        protected function onBodyLoadComplete( e:Event):void
+        protected function onBodyLoadComplete( bodyLoader:ActSprLoader ):void
         {
-            _bodyLoader.removeEventListener( Event.COMPLETE, onBodyLoadComplete );
+            //            _bodyLoader.removeEventListener( Event.COMPLETE, onBodyLoadComplete );
+            _bodyLoader = bodyLoader;
             if( !_bodyView )
             {
                 _bodyView = new ActSprBodyView();
@@ -143,22 +151,23 @@ package com.inoah.ro.characters
             _bodyView.initAct( _bodyLoader.actData );
             _bodyView.initSpr( _bodyLoader.sprData );
             //noah
-            _bodyView.actionIndex = 8;
             addChild( _bodyView );
         }
         
-        protected function onHeadLoadComplete( e:Event):void
+        protected function onHeadLoadComplete( headLoader:ActSprLoader ):void
         {
-            _headLoader.removeEventListener( Event.COMPLETE, onHeadLoadComplete );
+            //            _headLoader.removeEventListener( Event.COMPLETE, onHeadLoadComplete );
+            _headLoader = headLoader;
             _bodyView.headView.initAct( _headLoader.actData );
             _bodyView.headView.initSpr( _headLoader.sprData );
             addChild( _bodyView );
             addChild( _bodyView.headView );
         }
         
-        protected function onWeaponLoadComplete( e:Event):void
+        protected function onWeaponLoadComplete( weaponLoader:ActSprLoader ):void
         {
-            _weaponLoader.removeEventListener( Event.COMPLETE, onWeaponLoadComplete );
+            //            _weaponLoader.removeEventListener( Event.COMPLETE, onWeaponLoadComplete );
+            _weaponLoader = weaponLoader;
             _bodyView.weaponView.initAct( _weaponLoader.actData );
             _bodyView.weaponView.initSpr( _weaponLoader.sprData );
             addChild( _bodyView );
@@ -179,7 +188,11 @@ package com.inoah.ro.characters
             }
             else
             {
-                if( _isMoving )
+                if( _isHiting )
+                {
+                    actionHit();
+                }
+                else if( _isMoving )
                 {
                     actionWalk();
                 }
@@ -188,11 +201,21 @@ package com.inoah.ro.characters
                     actionStand();
                 }
             }
+            if( _isHiting || _isAttacking )
+            {
+                updateValues();
+            }
+        }
+        
+        private function updateValues():void
+        {
+            _hpValBar.update( 1, 100 );
+            _spValBar.update( 1, 100 );
         }
         
         public function actionStand():void
         {
-//            _currentIndex = 0;
+            //            _currentIndex = 0;
             _currentIndex = 32;
             if( _bodyView )
             {
@@ -214,11 +237,21 @@ package com.inoah.ro.characters
         public function actionAttack():void
         {
             _currentIndex = 80;
-//            _currentIndex = 40;
+            //            _currentIndex = 40;
             if( _bodyView )
             {
                 _bodyView.actionIndex = _currentIndex + _dirIndex;
                 _bodyView.weaponView.visible =true;
+            }
+        }
+        
+        public function actionHit():void
+        {
+            _currentIndex = 48;
+            if( _bodyView )
+            {
+                _bodyView.actionIndex = _currentIndex + _dirIndex;
+                _bodyView.weaponView.visible =false;
             }
         }
         
@@ -257,6 +290,16 @@ package com.inoah.ro.characters
         public function get isMoving():Boolean
         {
             return _isMoving;
+        }
+        
+        public function set isHiting( value:Boolean ):void
+        {
+            _isHiting = value;
+        }
+        
+        public function get isHiting():Boolean
+        {
+            return _isHiting;
         }
         
         public function set isAttacking( value:Boolean ):void

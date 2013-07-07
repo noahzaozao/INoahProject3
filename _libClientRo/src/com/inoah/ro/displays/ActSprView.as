@@ -14,6 +14,7 @@ package com.inoah.ro.displays
     import flash.display.Bitmap;
     import flash.display.Sprite;
     import flash.utils.ByteArray;
+    import flash.utils.Endian;
     
     /**
      * base actSpr view 
@@ -83,7 +84,11 @@ package com.inoah.ro.displays
             {
                 _act.destory();
             }
-            _act= new CACT( data );
+            var inData:ByteArray = new ByteArray();
+            inData.endian = Endian.BIG_ENDIAN;
+            data.position = 0;
+            data.readBytes( inData );
+            _act= new CACT( inData );
             actionIndex = 0;
             currentFrame = 0;
             _counter.initialize();
@@ -96,7 +101,11 @@ package com.inoah.ro.displays
             {
                 _spr.destory();
             }
-            _spr = new CSPR( data , data.length );
+            var inData:ByteArray = new ByteArray();
+            inData.endian = Endian.BIG_ENDIAN;
+            data.position = 0;
+            data.readBytes( inData );
+            _spr = new CSPR( inData , inData.length );
             _counter.initialize();
             _counter.reset( _counterTarget );
             updateFrame();

@@ -18,6 +18,10 @@ package com.inoah.ro.loaders
         {
             _actUrl = actPath;
             _sprUrl = _actUrl.replace( "act", "spr" );
+        }
+        
+        public function load():void
+        {
             _actLoader = new URLLoader();
             _actLoader.dataFormat = URLLoaderDataFormat.BINARY;
             _actLoader.addEventListener( Event.COMPLETE, onActLoaderComplete );

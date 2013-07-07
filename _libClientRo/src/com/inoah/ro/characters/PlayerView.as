@@ -8,5 +8,10 @@ package com.inoah.ro.characters
         {
             super(charInfo);
         }
+        
+        override public function tick( delta:Number ):void
+        {
+            super.tick( delta );
+        }
     }
 }

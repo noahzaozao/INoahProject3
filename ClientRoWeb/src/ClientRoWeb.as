@@ -1,14 +1,13 @@
 package
 {
-    import com.inoah.ro.characters.PlayerView;
     import com.inoah.ro.consts.MgrTypeConsts;
+    import com.inoah.ro.controllers.MapController;
+    import com.inoah.ro.controllers.MonsterController;
     import com.inoah.ro.controllers.PlayerController;
-    import com.inoah.ro.displays.ActSprBodyView;
-    import com.inoah.ro.infos.CharacterInfo;
+    import com.inoah.ro.managers.AssetMgr;
     import com.inoah.ro.managers.KeyMgr;
     import com.inoah.ro.managers.MainMgr;
     
-    import flash.display.Bitmap;
     import flash.display.Sprite;
     import flash.events.Event;
     import flash.filters.GlowFilter;
@@ -21,13 +20,9 @@ package
     {
         private var _tipTxt:TextField;
         
-        [Embed(source="bg.jpg" , mimeType="image/jpeg")]
-        private var _bg:Class;
-        private var _bgBmp:Bitmap;
-        
+        private var _mapController:MapController;
         private var _playerController:PlayerController;
-        private var _charView:PlayerView;
-        private var _monsterViewList:Vector.<ActSprBodyView>;
+        private var _monsterController:MonsterController;
         //        private var testMapView:*;
         private var lastTimeStamp:int;
         
@@ -45,36 +40,23 @@ package
         
         private function init( e:Event = null ):void
         {
+            stage.removeEventListener( Event.ADDED_TO_STAGE , init )
             lastTimeStamp = getTimer();
-            stage.addEventListener( Event.ENTER_FRAME, onEnterFrameHandler );
             
             MainMgr.instance;
             var keyMgr:KeyMgr = new KeyMgr( stage );
             MainMgr.instance.addMgr( MgrTypeConsts.KEY_MGR, keyMgr );
+            MainMgr.instance.addMgr( MgrTypeConsts.ASSET_MGR, new AssetMgr() );
             
-            _bgBmp = new _bg();
-            _bgBmp.x = - 50;
-            _bgBmp.y = - 50;
-            addChild( _bgBmp );
+            _mapController = new MapController( this );
+            _playerController = new PlayerController( _mapController.currentContainer );
+            _monsterController = new MonsterController( _mapController.currentContainer );
             
+            _playerController.targetList = _monsterController.monsterViewList;;
             
-            var charInfo:CharacterInfo = new CharacterInfo();
-            charInfo.init( "可爱的早早", "data/sprite/牢埃练/赣府烹/巢/2_巢.act", "data/sprite/牢埃练/个烹/巢/檬焊磊_巢.act", "data/sprite/牢埃练/檬焊磊/檬焊磊_巢_1207.act" );
-//            charInfo.init( "可爱的早早", "data/sprite/牢埃练/赣府烹/咯/2_咯.act", "data/sprite/牢埃练/个烹/巢/檬焊磊_咯.act" );
-            _charView = new PlayerView( charInfo );
-            _charView.x = 400;
-            _charView.y = 400;
-            addChild( _charView );
+            showTip();
             
-            _playerController = new PlayerController( _charView );
-            
-            _tipTxt = new TextField();
-            _tipTxt.width = 200;
-            var tf:TextFormat = new TextFormat( "宋体", 14, 0xffff00 );
-            _tipTxt.defaultTextFormat = tf;
-            _tipTxt.filters = [new GlowFilter( 0, 1, 2, 2, 5, 1)];
-            addChild( _tipTxt );
-            _tipTxt.text = "wasd移动 j攻击";
+            stage.addEventListener( Event.ENTER_FRAME, onEnterFrameHandler );
         }
         
         protected function onEnterFrameHandler(e:Event):void
@@ -83,8 +65,20 @@ package
             var delta:Number = (timeNow - lastTimeStamp) / 1000;
             lastTimeStamp = timeNow;
             
+            _mapController.tick( delta );
             _playerController.tick( delta );
-            _charView.tick( delta );
+            _monsterController.tick( delta );
+        }
+        
+        private function showTip():void
+        {
+            _tipTxt = new TextField();
+            _tipTxt.width = 200;
+            var tf:TextFormat = new TextFormat( "宋体", 14, 0xffff00 );
+            _tipTxt.defaultTextFormat = tf;
+            _tipTxt.filters = [new GlowFilter( 0, 1, 2, 2, 5, 1)];
+            addChild( _tipTxt );
+            _tipTxt.text = "wasd移动 j攻击";
         }
     }
 }

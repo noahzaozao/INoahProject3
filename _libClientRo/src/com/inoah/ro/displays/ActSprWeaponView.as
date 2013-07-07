@@ -53,6 +53,10 @@ package com.inoah.ro.displays
         
         override protected function updateFrame():void
         {
+            if( !_act )
+            {
+                return;
+            }
             _currentAaap = _act.aall.aa[_actionIndex].aaap[_currentFrame];
             
             var isExt:Boolean = false;
