@@ -5,6 +5,7 @@ package
     import com.inoah.ro.controllers.MonsterController;
     import com.inoah.ro.controllers.PlayerController;
     import com.inoah.ro.managers.AssetMgr;
+    import com.inoah.ro.managers.BattleMgr;
     import com.inoah.ro.managers.KeyMgr;
     import com.inoah.ro.managers.MainMgr;
     
@@ -47,6 +48,7 @@ package
             var keyMgr:KeyMgr = new KeyMgr( stage );
             MainMgr.instance.addMgr( MgrTypeConsts.KEY_MGR, keyMgr );
             MainMgr.instance.addMgr( MgrTypeConsts.ASSET_MGR, new AssetMgr() );
+            MainMgr.instance.addMgr( MgrTypeConsts.BATLLE_MGR, new BattleMgr() );
             
             _mapController = new MapController( this );
             _playerController = new PlayerController( _mapController.currentContainer );

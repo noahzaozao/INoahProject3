@@ -7,6 +7,7 @@
     <classEntry path="com.inoah.ro.maps.MapView"/>
     <classEntry path="com.inoah.ro.controllers.MapController"/>
     <classEntry path="com.inoah.ro.managers.AssetMgr"/>
+    <classEntry path="com.inoah.ro.managers.BattleMgr"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

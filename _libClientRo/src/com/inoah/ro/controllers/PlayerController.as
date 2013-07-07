@@ -7,6 +7,7 @@ package com.inoah.ro.controllers
     import com.inoah.ro.consts.MgrTypeConsts;
     import com.inoah.ro.events.ActSprViewEvent;
     import com.inoah.ro.infos.CharacterInfo;
+    import com.inoah.ro.managers.BattleMgr;
     import com.inoah.ro.managers.KeyMgr;
     import com.inoah.ro.managers.MainMgr;
     import com.inoah.ro.utils.Counter;
@@ -57,20 +58,7 @@ package com.inoah.ro.controllers
             {
                 moveCheck( delta );
                 attackCheck( delta );
-                hitCheck( delta );
                 _playerView.tick( delta );
-            }
-        }
-        /**
-         * 受击判定
-         * @param delta
-         */        
-        private function hitCheck(delta:Number):void
-        {
-            var keyMgr:KeyMgr = MainMgr.instance.getMgr( MgrTypeConsts.KEY_MGR ) as KeyMgr;
-            if( !keyMgr )
-            {
-                return;
             }
         }
         /**
@@ -104,10 +92,10 @@ package com.inoah.ro.controllers
                         chooseTarget();
                     }
                 }
-                if( _currentTargetView )
+                if( _currentTargetView  )
                 {
                     var dis:Number = Point.distance( new Point( _playerView.x, _playerView.y ), new Point( _currentTargetView.x, _currentTargetView.y ) );
-                    if( dis > 80 )
+                    if( dis > 80 || _currentTargetView.isDead == true )
                     {
                         _currentTargetView.removeEventListener( ActSprViewEvent.ACTION_END, onHitingEndHandler );
                         _currentTargetView.isHiting = false;
@@ -115,6 +103,8 @@ package com.inoah.ro.controllers
                     }
                     else
                     {
+                        var battleMgr:BattleMgr = MainMgr.instance.getMgr( MgrTypeConsts.BATLLE_MGR ) as BattleMgr;
+                        battleMgr.attack( _playerView, _currentTargetView );
                         _playerView.addEventListener( ActSprViewEvent.ACTION_END, onActionEndHandler );
                         _playerView.isAttacking = true;
                     }

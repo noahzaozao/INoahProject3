@@ -115,9 +115,8 @@ package com.inoah.ro.characters
             }
         }
         
-        override public function tick( delta:Number ):void
+        protected function moveCheck( delta:Number ):void
         {
-            super.tick( delta );
             if( !_isMoving && !_isHiting )
             {
                 _moveCounter.tick( delta );
@@ -176,6 +175,21 @@ package com.inoah.ro.characters
                     y = _targetPoint.y;
                 }
             }
+        }
+
+        protected function attackCheck( delta:Number ):void
+        {
+            
+        }
+        
+        override public function tick( delta:Number ):void
+        {
+            super.tick( delta );
+            if( _isDead )
+            {
+                return;   
+            }
+            moveCheck( delta );
         }
     }
 }

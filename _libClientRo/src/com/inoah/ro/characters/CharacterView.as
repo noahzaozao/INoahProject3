@@ -57,6 +57,7 @@ package com.inoah.ro.characters
         protected var _spValBar:ValueBarView;
         protected var _weaponLoader:ActSprLoader;
         protected var _isHiting:Boolean;
+        protected var _isDead:Boolean;
         
         public function CharacterView( charInfo:CharacterInfo = null )
         {
@@ -70,6 +71,15 @@ package com.inoah.ro.characters
             }
         }
         
+        public function get isDead():Boolean
+        {
+            return _isDead;
+        }
+        
+        public function get charInfo():CharacterInfo
+        {
+            return _charInfo;
+        }
         public function setCharInfo( charInfo:CharacterInfo ):void
         {
             _charInfo = charInfo;
@@ -122,6 +132,8 @@ package com.inoah.ro.characters
             _spValBar.update( 1, 100 );
             
             updateCharInfo( _charInfo );
+            
+            updateValues();
         }
         
         public function updateCharInfo( charInfo:CharacterInfo ):void
@@ -207,6 +219,10 @@ package com.inoah.ro.characters
             {
                 _bodyView.tick( delta );
             }
+            if( _isDead )
+            {
+                return;   
+            }
             if( _isAttacking )
             {
                 actionAttack();
@@ -238,8 +254,33 @@ package com.inoah.ro.characters
         
         private function updateValues():void
         {
-            _hpValBar.update( 1, 100 );
-            _spValBar.update( 1, 100 );
+            _hpValBar.update( _charInfo.curHp, _charInfo.maxHp );
+            _spValBar.update( _charInfo.curSp, _charInfo.maxSp );
+            if( _charInfo.isDead )
+            {
+                actionDead();
+                dispatchEvent( new ActSprViewEvent( ActSprViewEvent.ACTION_DEAD_START ) );
+                _isDead = true;
+            }
+        }
+        
+        private function actionDead():void
+        {
+            _currentIndex = 56;
+            if( _bodyView )
+            {
+                _bodyView.counterTargetRate = 0;
+                _bodyView.actionIndex = _currentIndex + _dirIndex;
+                if( _headView )
+                {
+                    _headView.actionIndex = _currentIndex + _dirIndex;
+                }
+                if( _weaponView )
+                {
+                    _weaponView.actionIndex = _currentIndex + _dirIndex;
+                    _weaponView.visible =false;
+                }
+            }
         }
         
         public function actionStand():void
@@ -287,7 +328,8 @@ package com.inoah.ro.characters
             //            _currentIndex = 40;
             if( _bodyView )
             {
-                _bodyView.counterTargetRate = 0.27;
+                _bodyView.counterTargetRate = 0.54;
+//                _bodyView.counterTargetRate = 0.27;
                 _bodyView.actionIndex = _currentIndex + _dirIndex;
                 if( _headView )
                 {
