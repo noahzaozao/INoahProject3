@@ -1,8 +1,6 @@
 package com.inoah.ro.displays
 {
     import com.inoah.ro.events.ActSprViewEvent;
-    
-    import flash.events.Event;
 
     /**
      * body view 

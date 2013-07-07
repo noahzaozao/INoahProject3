@@ -29,9 +29,14 @@ package com.inoah.ro.displays
         protected var _currentFrame:uint;
         protected var _currentAaap:AnyActAnyPat;
         protected var _bitmap:Bitmap;
+        protected var _baseCounterTarget:Number;
         protected var _counterTarget:Number;
         protected var _counter:Counter;
         protected var _couldTick:Boolean;
+        /**
+         * 动作速率
+         */        
+        private var _currentTargetRate:Number;
         
         public function get actions():CACT
         {
@@ -41,7 +46,8 @@ package com.inoah.ro.displays
         public function ActSprView()
         {
             _counter = new Counter();
-            _counterTarget = 0.075;
+            _baseCounterTarget = 0.075 ;
+            _counterTarget = _baseCounterTarget;
         }
         
         public function get currentAaap():AnyActAnyPat
@@ -49,14 +55,19 @@ package com.inoah.ro.displays
             return _currentAaap;
         }
         
-        public function get counterTarget():Number
+        public function get counterTargetRate():Number
         {
-            return _counterTarget;
+            return _currentTargetRate;
         }
         
-        public function set counterTarget( value:Number ):void
+        public function set counterTargetRate( value:Number ):void
         {
-            _counterTarget = value;
+            _currentTargetRate = value;
+            if( _currentTargetRate >= 1 )
+            {
+                _currentTargetRate = 0.8;
+            }
+            _counterTarget = _baseCounterTarget * ( 1-  _currentTargetRate );
         }
             
         public function set actionIndex( value:uint ):void 

@@ -62,7 +62,7 @@ package com.inoah.ro.characters
         {
             _isMoving = false;
             _targetPoint = new Point( 0, 0 );
-            _speed = 100;
+            _speed = 140;
             if( charInfo )
             {
                 _charInfo = charInfo;
@@ -216,6 +216,10 @@ package com.inoah.ro.characters
                 if( _isHiting )
                 {
                     actionHit();
+                    if( _isMoving )
+                    {
+                        _targetPoint = new Point( x, y );
+                    }
                 }
                 else if( _isMoving )
                 {
@@ -244,6 +248,7 @@ package com.inoah.ro.characters
             _currentIndex = 32;
             if( _bodyView )
             {
+                _bodyView.counterTargetRate = 0;
                 _bodyView.actionIndex = _currentIndex + _dirIndex;
                 if( _headView )
                 {
@@ -262,6 +267,7 @@ package com.inoah.ro.characters
             _currentIndex = 8;
             if( _bodyView )
             {
+                _bodyView.counterTargetRate = 0;
                 _bodyView.actionIndex = _currentIndex + _dirIndex;
                 if( _headView )
                 {
@@ -281,6 +287,7 @@ package com.inoah.ro.characters
             //            _currentIndex = 40;
             if( _bodyView )
             {
+                _bodyView.counterTargetRate = 0.27;
                 _bodyView.actionIndex = _currentIndex + _dirIndex;
                 if( _headView )
                 {
@@ -299,6 +306,7 @@ package com.inoah.ro.characters
             _currentIndex = 48;
             if( _bodyView )
             {
+                _bodyView.counterTargetRate = 0;
                 _bodyView.actionIndex = _currentIndex + _dirIndex;
                 if( _headView )
                 {
@@ -368,6 +376,15 @@ package com.inoah.ro.characters
         public function set isHiting( value:Boolean ):void
         {
             _isHiting = value;
+            _bodyView.currentFrame = 0;
+            if( _headView )
+            {
+                _headView.currentFrame = 0;
+            }
+            if( _weaponView )
+            {
+                _weaponView.currentFrame = 0;
+            }
         }
         
         public function get isHiting():Boolean

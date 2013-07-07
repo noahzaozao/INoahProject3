@@ -56,19 +56,35 @@ package com.inoah.ro.controllers
             if( _playerView )
             {
                 moveCheck( delta );
+                attackCheck( delta );
+                hitCheck( delta );
                 _playerView.tick( delta );
             }
         }
-        
-        protected function moveCheck( delta:Number ):void
+        /**
+         * 受击判定
+         * @param delta
+         */        
+        private function hitCheck(delta:Number):void
         {
             var keyMgr:KeyMgr = MainMgr.instance.getMgr( MgrTypeConsts.KEY_MGR ) as KeyMgr;
             if( !keyMgr )
             {
                 return;
             }
-            _playerView.isMoving = false;
-            if( _playerView.isAttacking  )
+        }
+        /**
+         * 攻击判定
+         * @param delta
+         */        
+        private function attackCheck(delta:Number):void
+        {
+            var keyMgr:KeyMgr = MainMgr.instance.getMgr( MgrTypeConsts.KEY_MGR ) as KeyMgr;
+            if( !keyMgr )
+            {
+                return;
+            }
+            if( _playerView.isAttacking )
             {
                 return;
             }
@@ -78,7 +94,7 @@ package com.inoah.ro.controllers
                 _isCheckTarget = false;
                 _checkTargetCounter.reset( 1 );
             }
-            if( keyMgr.isDown( Keyboard.J ))
+            if( keyMgr.isDown( Keyboard.J )  )
             {
                 if( !_currentTargetView )
                 {
@@ -105,6 +121,27 @@ package com.inoah.ro.controllers
                 }
                 return;
             }
+        }
+        
+        /**
+         * 移动判定 
+         * @param delta
+         */        
+        protected function moveCheck( delta:Number ):void
+        {
+            var keyMgr:KeyMgr = MainMgr.instance.getMgr( MgrTypeConsts.KEY_MGR ) as KeyMgr;
+            if( !keyMgr )
+            {
+                return;
+            }
+            
+            _playerView.isMoving = false;
+
+            if( _playerView.isAttacking )
+            {
+                return;
+            }
+            
             if( keyMgr.isDown( Keyboard.W ) )
             {
                 _playerView.dirIndex = DirIndexConsts.UP;
@@ -183,18 +220,25 @@ package com.inoah.ro.controllers
         {
             _playerView.removeEventListener( ActSprViewEvent.ACTION_END, onActionEndHandler );
             //noah
-//            if( _playerView.actionIndex >= 40 && _playerView.actionIndex < 48 )
-//            {
-//                _playerView.isAttacking = false;
-//            }
+            //            if( _playerView.actionIndex >= 40 && _playerView.actionIndex < 48 )
+            //            {
+            //                _playerView.isAttacking = false;
+            //            }
             if( _playerView.actionIndex >= 80 && _playerView.actionIndex < 88 )
             {
                 _playerView.isAttacking = false;
             }
             if( _currentTargetView )
             {
-                _currentTargetView.addEventListener( ActSprViewEvent.ACTION_END, onHitingEndHandler );
-                _currentTargetView.isHiting = true;
+                if( _currentTargetView.isHiting )
+                {
+                    _currentTargetView.isHiting = true;
+                }
+                else
+                {
+                    _currentTargetView.addEventListener( ActSprViewEvent.ACTION_END, onHitingEndHandler );
+                    _currentTargetView.isHiting = true;
+                }
             }
         }
         
