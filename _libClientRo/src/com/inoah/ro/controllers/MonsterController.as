@@ -26,10 +26,17 @@ package com.inoah.ro.controllers
             _root = root;
             var monsterInfo:CharacterInfo;
             _monsterViewList = new Vector.<MonsterView>();
-            for( var i:int = 0;i<10 ;i++)
+            for( var i:int = 0;i<50 ;i++)
             {
                 monsterInfo = new CharacterInfo();
-                monsterInfo.init( "波利" , "" , "data/sprite/阁胶磐/poring.act" );
+                if( int(Math.random() * 2) > 0 )
+                {
+                    monsterInfo.init( "波利" , "" , "data/sprite/阁胶磐/poring.act" , "" ,100 );
+                }
+                else
+                {
+                    monsterInfo.init( "波波利" , "" , "data/sprite/阁胶磐/poporing.act", "" , 200 );
+                }
                 _monsterViewList[i] = new MonsterView( monsterInfo );
                 _monsterViewList[i].x = 700 * Math.random() + 50;
                 _monsterViewList[i].y = 500 * Math.random() + 50;
@@ -94,12 +101,19 @@ package com.inoah.ro.controllers
             _newMonsterCounter.tick( delta );
             if( _newMonsterCounter.expired )
             {
-                if( _monsterViewList.length < 20 )
+                if( _monsterViewList.length < 100 )
                 {
                     var monsterView:MonsterView;
                     var monsterInfo:CharacterInfo;
                     monsterInfo = new CharacterInfo();
-                    monsterInfo.init( "波利" , "" , "data/sprite/阁胶磐/poring.act" );
+                    if( int(Math.random() * 2) > 0 )
+                    {
+                        monsterInfo.init( "波利" , "" , "data/sprite/阁胶磐/poring.act" , "" , 100 );
+                    }
+                    else
+                    {
+                        monsterInfo.init( "波波利" , "" , "data/sprite/阁胶磐/poporing.act" , "" , 200 );
+                    }
                     monsterView = new MonsterView( monsterInfo );
                     monsterView.x = 700 * Math.random() + 50;
                     monsterView.y = 500 * Math.random() + 50;

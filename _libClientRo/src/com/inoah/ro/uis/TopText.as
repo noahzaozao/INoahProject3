@@ -17,7 +17,7 @@ package com.inoah.ro.uis
         {
             _clearLineCounter = new Counter();
             _clearLineCounter.initialize();
-            _clearLineCounter.reset( 5 );
+            _clearLineCounter.reset( 10 );
             _tipTxt = new TextField();
             _tipTxt.width = 960;
             var tf:TextFormat = new TextFormat( "宋体", 16, 0xffff00 );
@@ -59,11 +59,16 @@ package com.inoah.ro.uis
             {
                 var index:int = _contentStr.indexOf( "\n" );
                 _contentStr = _contentStr.slice( index + 1 );
-                _clearLineCounter.reset( 2 );
+                _clearLineCounter.reset( 10 );
             }
             if( _topTxt.text != _contentStr )
             {
                 _topTxt.text =  _contentStr;
+                while( _contentStr.split( "\n" ).length > 15 )
+                {
+                    index= _contentStr.indexOf( "\n" );
+                    _contentStr = _contentStr.slice( index + 1 );
+                }
             }
         }
     }

@@ -2,14 +2,12 @@ package com.inoah.ro.managers
 {
     import com.inoah.ro.interfaces.IMgr;
     import com.inoah.ro.loaders.ActSprLoader;
+    import com.inoah.ro.uis.TopText;
     
     import flash.events.Event;
     
     public class AssetMgr implements IMgr
     {
-        [Embed(source="../../../../bg.jpg" , mimeType="image/jpeg")]
-        public var BG_CLASS:Class;
-        
         private var _cacheList:Vector.<ActSprLoader>;
         private var _cacheListIndex:Vector.<String>;
         private var _loaderList:Vector.<ActSprLoader>;
@@ -34,11 +32,27 @@ package com.inoah.ro.managers
             return false;
         }
         
-        public function getClass( strClassName:String ):Class
+        public function getResList( resPathList:Vector.<String>, callBack:Function, onProgress:Function = null ):void
         {
-            return this[ strClassName ];
+            var len:int = resPathList.length;
+            for( var i:int =0;i<len;i++)
+            {
+                _loaderList.push( new ActSprLoader( resPathList[i] ) );
+                if( i == len - 1 )
+                {
+                    _callBackList.push( callBack );
+                }
+                else
+                {
+                    _callBackList.push( null );
+                }
+            }
+            
+            if( _isLoading == false )
+            {
+                loadNext();
+            }
         }
-        
         public function getRes( resPath:String, callBack:Function ):void
         {
             _loaderList.push( new ActSprLoader( resPath ) );
@@ -62,7 +76,10 @@ package com.inoah.ro.managers
                 }
                 else
                 {
-                    _callBackList[0].apply( null, [ _cacheList[ _cacheListIndex.indexOf(_loaderList[0].actUrl) ] ] );
+                    if( _callBackList[0] != null )
+                    {
+                        _callBackList[0].apply( null, [ _cacheList[ _cacheListIndex.indexOf(_loaderList[0].actUrl) ] ] );
+                    }
                     _loaderList.shift();
                     _callBackList.shift();
                     loadNext();
@@ -74,11 +91,14 @@ package com.inoah.ro.managers
         {
             var loader:ActSprLoader = e.currentTarget as ActSprLoader;
             loader.removeEventListener( Event.COMPLETE, onLoadComplete );
-            trace( "[AssetMgr] loadComplete " + loader.actUrl );
+            TopText.show( "加载完成..." + loader.actUrl );
             _cacheList.push( loader );
             _cacheListIndex.push( loader.actUrl );
             
-            _callBackList[0].apply( null, [loader]);
+            if( _callBackList[0] != null )
+            {
+                _callBackList[0].apply( null, [loader]);
+            }
             _loaderList.shift();
             _callBackList.shift();
             _isLoading = false;

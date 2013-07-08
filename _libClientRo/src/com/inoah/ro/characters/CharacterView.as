@@ -71,6 +71,11 @@ package com.inoah.ro.characters
             }
         }
         
+        public function get headTopContainer():Sprite
+        {
+            return _headTopContainer;
+        }
+        
         public function get isDead():Boolean
         {
             return _isDead;
@@ -328,8 +333,7 @@ package com.inoah.ro.characters
             //            _currentIndex = 40;
             if( _bodyView )
             {
-                _bodyView.counterTargetRate = 0.54;
-//                _bodyView.counterTargetRate = 0.27;
+                _bodyView.counterTargetRate = 0.27;
                 _bodyView.actionIndex = _currentIndex + _dirIndex;
                 if( _headView )
                 {

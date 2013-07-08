@@ -4,6 +4,7 @@ package
     import com.inoah.ro.controllers.MapController;
     import com.inoah.ro.controllers.MonsterController;
     import com.inoah.ro.controllers.PlayerController;
+    import com.inoah.ro.loaders.ActSprLoader;
     import com.inoah.ro.managers.AssetMgr;
     import com.inoah.ro.managers.BattleMgr;
     import com.inoah.ro.managers.KeyMgr;
@@ -46,16 +47,15 @@ package
             lastTimeStamp = getTimer();
             
             MainMgr.instance;
-            var keyMgr:KeyMgr = new KeyMgr( stage );
-            MainMgr.instance.addMgr( MgrTypeConsts.KEY_MGR, keyMgr );
             MainMgr.instance.addMgr( MgrTypeConsts.ASSET_MGR, new AssetMgr() );
-            MainMgr.instance.addMgr( MgrTypeConsts.BATLLE_MGR, new BattleMgr() );
             
-            _mapController = new MapController( this );
-            _playerController = new PlayerController( _mapController.currentContainer );
-            _monsterController = new MonsterController( _mapController.currentContainer );
-            
-            _playerController.targetList = _monsterController.monsterViewList;;
+            var assetMgr:AssetMgr = MainMgr.instance.getMgr( MgrTypeConsts.ASSET_MGR ) as AssetMgr;
+            var resPathList:Vector.<String> = new Vector.<String>();
+            resPathList.push( "data/sprite/牢埃练/赣府烹/巢/2_巢.act" );
+            resPathList.push( "data/sprite/牢埃练/个烹/巢/檬焊磊_巢.act" );
+            resPathList.push( "data/sprite/牢埃练/檬焊磊/檬焊磊_巢_1207.act" );
+            resPathList.push( "data/sprite/阁胶磐/poring.act" );
+            assetMgr.getResList( resPathList , onInitLoadComplete );
             
             TopText.init();
             addChild( TopText.textField );
@@ -64,15 +64,45 @@ package
             stage.addEventListener( Event.ENTER_FRAME, onEnterFrameHandler );
         }
         
+        private function onInitLoadComplete( loader:ActSprLoader ):void
+        {
+            var keyMgr:KeyMgr = new KeyMgr( stage );
+            MainMgr.instance.addMgr( MgrTypeConsts.KEY_MGR, keyMgr );
+            MainMgr.instance.addMgr( MgrTypeConsts.BATLLE_MGR, new BattleMgr( this ) );
+            
+            _mapController = new MapController( this );
+            _playerController = new PlayerController( _mapController.currentContainer );
+            _monsterController = new MonsterController( _mapController.currentContainer );
+            
+            _playerController.targetList = _monsterController.monsterViewList;;
+            
+            addChild( TopText.textField );
+            addChild( TopText.tipTextField );
+        }
+        
         protected function onEnterFrameHandler(e:Event):void
         {
             var timeNow:uint = getTimer();
             var delta:Number = (timeNow - lastTimeStamp) / 1000;
             lastTimeStamp = timeNow;
             
-            _mapController.tick( delta );
-            _playerController.tick( delta );
-            _monsterController.tick( delta );
+            var battleMgr:BattleMgr = MainMgr.instance.getMgr( MgrTypeConsts.BATLLE_MGR ) as BattleMgr;
+            if( battleMgr )
+            {
+                battleMgr.tick( delta );
+            }
+            if( _mapController )
+            {
+                _mapController.tick( delta );
+            }
+            if( _playerController )
+            {
+                _playerController.tick( delta );
+            }
+            if( _monsterController )
+            {
+                _monsterController.tick( delta );
+            }
             TopText.tick( delta );
         }
     }

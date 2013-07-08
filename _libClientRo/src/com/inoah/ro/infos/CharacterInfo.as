@@ -13,18 +13,19 @@ package com.inoah.ro.infos
         protected var _maxSp:Number;
         protected var _atk:Number;
         protected var _isDead:Boolean;
+        protected var _isCritical:Boolean;
         
         public function CharacterInfo()
         {
         }
         
-        public function init( name:String, headRes:String, bodyRes:String, weaponRes:String = "" ):void
+        public function init( name:String, headRes:String, bodyRes:String, weaponRes:String = "", maxHp:Number = 100 ):void
         {
             _name = name;
             _headRes = headRes;
             _bodyRes = bodyRes;
             _weaponRes = weaponRes;
-            _maxHp = 100;
+            _maxHp = maxHp;
             _maxSp = 100;
             _atk = 20;
             _curHp = _maxHp;
@@ -43,14 +44,20 @@ package com.inoah.ro.infos
         
         public function get atk():Number
         {
+            _isCritical = Math.random() * 3 < 1
             //上下浮动20%
-            var atk:Number = uint(_atk + Math.random() * _atk * 0.2 *( int(Math.random() * 2)>0?1:-1) ); 
+            var atk:Number = uint(_atk + Math.random() * _atk * 0.2 *( int(Math.random() * 2)>0?1:-1 ) ); 
             //暴击率 10%
-            if( Math.random() * 3 < 1 )
+            if( _isCritical )
             {
                 atk = 2 * atk
             }
             return atk;
+        }
+        
+        public function get isCritical():Boolean
+        {
+            return _isCritical;
         }
         
         public function get maxHp():Number

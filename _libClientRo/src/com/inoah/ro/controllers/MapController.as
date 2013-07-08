@@ -6,7 +6,10 @@ package com.inoah.ro.controllers
     
     import flash.display.Bitmap;
     import flash.display.DisplayObject;
+    import flash.display.Loader;
     import flash.display.Sprite;
+    import flash.events.Event;
+    import flash.net.URLRequest;
     
     public class MapController
     {
@@ -14,19 +17,25 @@ package com.inoah.ro.controllers
         
         private var _bgBmp:Bitmap;
         private var _currentContaner:Sprite;
+        private var _bgLoader:Loader;
         
         public function MapController( root:Sprite )
         {
             _root = root;
-            var assetMgr:AssetMgr = MainMgr.instance.getMgr( MgrTypeConsts.ASSET_MGR ) as AssetMgr;
-            var cls:Class = assetMgr.getClass( "BG_CLASS" );
-            _bgBmp = new cls();
-            _bgBmp.x = - 50;
-            _bgBmp.y = - 50;
-            _root.addChild( _bgBmp );
+            _bgLoader = new Loader();
+            _bgLoader.contentLoaderInfo.addEventListener( Event.COMPLETE, onBgLoadComplete );
+            _bgLoader.load( new URLRequest( "bg.jpg" ));
             
             _currentContaner = new Sprite();
             _root.addChild( _currentContaner );
+        }
+        
+        protected function onBgLoadComplete( e:Event):void
+        {
+            _bgBmp = _bgLoader.content as Bitmap;
+            _bgBmp.x = - 50;
+            _bgBmp.y = - 50;
+            _root.addChildAt( _bgBmp , 0 );
         }
         
         public function tick( delta:Number ):void
