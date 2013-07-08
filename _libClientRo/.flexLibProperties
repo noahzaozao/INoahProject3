@@ -8,6 +8,7 @@
     <classEntry path="com.inoah.ro.controllers.MapController"/>
     <classEntry path="com.inoah.ro.managers.AssetMgr"/>
     <classEntry path="com.inoah.ro.managers.BattleMgr"/>
+    <classEntry path="com.inoah.ro.uis.TopText"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

@@ -8,6 +8,7 @@ package
     import com.inoah.ro.managers.BattleMgr;
     import com.inoah.ro.managers.KeyMgr;
     import com.inoah.ro.managers.MainMgr;
+    import com.inoah.ro.uis.TopText;
     
     import flash.display.Sprite;
     import flash.events.Event;
@@ -19,7 +20,7 @@ package
     [SWF(width="960",height="560",frameRate="60",backgroundColor="#2f2f2f")]
     public class ClientRoWeb extends Sprite
     {
-        private var _tipTxt:TextField;
+        private var _topTxt:TopText;
         
         private var _mapController:MapController;
         private var _playerController:PlayerController;
@@ -56,7 +57,9 @@ package
             
             _playerController.targetList = _monsterController.monsterViewList;;
             
-            showTip();
+            TopText.init();
+            addChild( TopText.textField );
+            addChild( TopText.tipTextField );
             
             stage.addEventListener( Event.ENTER_FRAME, onEnterFrameHandler );
         }
@@ -70,17 +73,7 @@ package
             _mapController.tick( delta );
             _playerController.tick( delta );
             _monsterController.tick( delta );
-        }
-        
-        private function showTip():void
-        {
-            _tipTxt = new TextField();
-            _tipTxt.width = 200;
-            var tf:TextFormat = new TextFormat( "宋体", 14, 0xffff00 );
-            _tipTxt.defaultTextFormat = tf;
-            _tipTxt.filters = [new GlowFilter( 0, 1, 2, 2, 5, 1)];
-            addChild( _tipTxt );
-            _tipTxt.text = "wasd移动 j攻击";
+            TopText.tick( delta );
         }
     }
 }

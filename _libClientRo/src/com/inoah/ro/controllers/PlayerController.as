@@ -105,8 +105,21 @@ package com.inoah.ro.controllers
                     {
                         var battleMgr:BattleMgr = MainMgr.instance.getMgr( MgrTypeConsts.BATLLE_MGR ) as BattleMgr;
                         battleMgr.attack( _playerView, _currentTargetView );
-                        _playerView.addEventListener( ActSprViewEvent.ACTION_END, onActionEndHandler );
                         _playerView.isAttacking = true;
+                        _playerView.addEventListener( ActSprViewEvent.ACTION_END, onActionEndHandler );
+                        
+                        if( _currentTargetView )
+                        {
+                            if( _currentTargetView.isHiting )
+                            {
+                                _currentTargetView.isHiting = true;
+                            }
+                            else
+                            {
+                                _currentTargetView.addEventListener( ActSprViewEvent.ACTION_END, onHitingEndHandler );
+                                _currentTargetView.isHiting = true;
+                            }
+                        }
                     }
                 }
                 return;
@@ -209,27 +222,7 @@ package com.inoah.ro.controllers
         protected function onActionEndHandler( e:Event):void
         {
             _playerView.removeEventListener( ActSprViewEvent.ACTION_END, onActionEndHandler );
-            //noah
-            //            if( _playerView.actionIndex >= 40 && _playerView.actionIndex < 48 )
-            //            {
-            //                _playerView.isAttacking = false;
-            //            }
-            if( _playerView.actionIndex >= 80 && _playerView.actionIndex < 88 )
-            {
-                _playerView.isAttacking = false;
-            }
-            if( _currentTargetView )
-            {
-                if( _currentTargetView.isHiting )
-                {
-                    _currentTargetView.isHiting = true;
-                }
-                else
-                {
-                    _currentTargetView.addEventListener( ActSprViewEvent.ACTION_END, onHitingEndHandler );
-                    _currentTargetView.isHiting = true;
-                }
-            }
+            _playerView.isAttacking = false;
         }
         
         protected function onHitingEndHandler(event:Event):void

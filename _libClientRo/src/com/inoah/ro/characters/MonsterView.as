@@ -12,6 +12,7 @@ package com.inoah.ro.characters
         public function MonsterView(charInfo:CharacterInfo=null)
         {
             super(charInfo);
+            _headTopContainer.y = -60;
             _speed = 30;
             _moveCounter = new Counter();
             _moveCounter.initialize();
@@ -124,7 +125,7 @@ package com.inoah.ro.characters
             if( _moveCounter.expired )
             {
                 _targetPoint = new Point( int(x + abc() * Math.random() * 100 + 5 ), int(y + abc() * Math.random() * 100 + 5 ) );
-                if( _targetPoint.x > 900 || _targetPoint.y < 50 )
+                if( _targetPoint.x > 900 || _targetPoint.x < 50 )
                 {
                     _targetPoint.x = x;
                 }

@@ -3,6 +3,7 @@ package com.inoah.ro.controllers
     import com.inoah.ro.characters.MonsterView;
     import com.inoah.ro.events.ActSprViewEvent;
     import com.inoah.ro.infos.CharacterInfo;
+    import com.inoah.ro.utils.Counter;
     
     import flash.display.Sprite;
     
@@ -14,9 +15,13 @@ package com.inoah.ro.controllers
         private var _root:Sprite;
         private var _monsterViewList:Vector.<MonsterView>;
         private var _animationUnitList:Vector.<IAnimatable>;
+        private var _newMonsterCounter:Counter;
         
         public function MonsterController( root:Sprite )
         {
+            _newMonsterCounter = new Counter();
+            _newMonsterCounter.initialize();
+            _newMonsterCounter.reset( 3 );
             _animationUnitList = new Vector.<IAnimatable>();
             _root = root;
             var monsterInfo:CharacterInfo;
@@ -85,6 +90,30 @@ package com.inoah.ro.controllers
             {
                 _monsterViewList[i].tick( delta ); 
             }
+            
+            _newMonsterCounter.tick( delta );
+            if( _newMonsterCounter.expired )
+            {
+                if( _monsterViewList.length < 20 )
+                {
+                    var monsterView:MonsterView;
+                    var monsterInfo:CharacterInfo;
+                    monsterInfo = new CharacterInfo();
+                    monsterInfo.init( "波利" , "" , "data/sprite/阁胶磐/poring.act" );
+                    monsterView = new MonsterView( monsterInfo );
+                    monsterView.x = 700 * Math.random() + 50;
+                    monsterView.y = 500 * Math.random() + 50;
+                    _root.addChild( monsterView );
+                    monsterView.addEventListener( ActSprViewEvent.ACTION_DEAD_START , onDeadStartHandler );
+                    monsterView.alpha = 0;
+                    _monsterViewList.push( monsterView );
+                    var tween:Tween = new Tween( monsterView, 1 );
+                    tween.fadeTo( 1 );
+                    appendAnimateUnit( tween );
+                }
+                _newMonsterCounter.reset( 3 );
+            }
+            
             len = _animationUnitList.length;
             var animateUnit:IAnimatable;
             

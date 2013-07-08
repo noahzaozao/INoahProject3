@@ -26,7 +26,7 @@ package com.inoah.ro.infos
             _weaponRes = weaponRes;
             _maxHp = 100;
             _maxSp = 100;
-            _atk = 25;
+            _atk = 20;
             _curHp = _maxHp;
             _curSp = _maxSp;
         }
@@ -43,7 +43,14 @@ package com.inoah.ro.infos
         
         public function get atk():Number
         {
-            return _atk;
+            //上下浮动20%
+            var atk:Number = uint(_atk + Math.random() * _atk * 0.2 *( int(Math.random() * 2)>0?1:-1) ); 
+            //暴击率 10%
+            if( Math.random() * 3 < 1 )
+            {
+                atk = 2 * atk
+            }
+            return atk;
         }
         
         public function get maxHp():Number
